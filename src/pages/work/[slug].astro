@@ -1,0 +1,66 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PeelSlider from '../../components/PeelSlider.astro';
+import { disciplines } from '../../data/site';
+
+export async function getStaticPaths() {
+  const all = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
+  return all.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, next: all[(i + 1) % all.length] },
+  }));
+}
+
+const { entry, next } = Astro.props;
+const d = entry.data;
+const { Content } = await render(entry);
+---
+<Base title={d.title} description={d.summary} accent={d.accent}>
+  <article data-template={d.template}>
+    <header class="case-head wrap">
+      <p class="case-head__back"><a class="text-link" href="/work/">All work</a></p>
+      <h1 class="case-title">{d.title}</h1>
+      <p class="case-summary">{d.summary}</p>
+
+      <aside class="props" aria-label="Project details">
+        <div class="props__head">Properties <span>{d.template === 'process' ? 'Case study' : 'Project'}</span></div>
+        <dl>
+          <dt>Client</dt><dd>{d.client}</dd>
+          <dt>Role</dt><dd>{d.role}</dd>
+          <dt>Year</dt><dd>{d.year}</dd>
+          <dt>Type</dt><dd>{d.kind}</dd>
+          <dt>Layers</dt>
+          <dd>
+            <ul>
+              {d.disciplines.map((k) => (
+                <li><span class="swatch" style={`--c:${disciplines[k].color}`}></span>{disciplines[k].name}</li>
+              ))}
+            </ul>
+          </dd>
+          {d.tools.length > 0 && (<><dt>Tools</dt><dd>{d.tools.join(', ')}</dd></>)}
+        </dl>
+      </aside>
+    </header>
+
+    <div class="wrap">
+      <PeelSlider
+        title={d.title}
+        accent={d.accent}
+        cover={d.cover}
+        process={d.process}
+        finalLabel={d.finalLabel}
+        processLabel={d.processLabel}
+      />
+
+      <div class="case-body">
+        <Content />
+      </div>
+
+      <a class="next" href={`/work/${next.id}/`} style={`--next-accent:${next.data.accent}`} data-cursor="Next">
+        <span class="small">Next project</span>
+        <span class="next__title">{next.data.title}</span>
+      </a>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,31 @@
+---
+import Placeholder from './Placeholder.astro';
+interface Props {
+  title: string;
+  accent: string;
+  cover?: string;
+  process?: string;
+  finalLabel: string;
+  processLabel: string;
+}
+const { title, accent, cover, process, finalLabel, processLabel } = Astro.props;
+---
+<figure class="peel-figure" style="margin:0">
+  <div class="peel" data-peel-slider style={`--accent:${accent}`}>
+    <div class="peel__layer peel__layer--process">
+      <Placeholder kind="process" label={`${processLabel} layer: wireframe, raw footage, sketch or grid`} src={process} alt={`${title}, ${processLabel.toLowerCase()}`} />
+    </div>
+    <div class="peel__layer peel__layer--final">
+      <Placeholder kind="final" label={`${finalLabel} layer: hero image or frame`} accent={accent} src={cover} alt={title} />
+    </div>
+    <span class="peel__label peel__label--process">{processLabel}</span>
+    <span class="peel__label peel__label--final">{finalLabel}</span>
+    <span class="peel__line" aria-hidden="true">
+      <span class="peel__handle">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 5 2 10l5 5M13 5l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </span>
+    <input type="range" min="0" max="100" value="50" step="0.5" aria-label={`Drag to compare the ${processLabel.toLowerCase()} and ${finalLabel.toLowerCase()} layers`} data-cursor="Drag" />
+  </div>
+  <figcaption class="peel-caption small">Drag across to peel from {processLabel.toLowerCase()} to {finalLabel.toLowerCase()}.</figcaption>
+</figure>

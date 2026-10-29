@@ -1,0 +1,82 @@
+---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { site, experience, tools } from '../data/site';
+---
+<Base title="About" description="About Avijeet Singh, experience designer in Mumbai.">
+  <header class="page-head wrap">
+    <h1 class="page-title">About</h1>
+  </header>
+
+  <section class="wrap about-grid" aria-label="Introduction">
+    <div class="about-grid__media">
+      <Placeholder kind="portrait" ratio="4 / 5" label="Portrait, 4:5. A candid shot with a camera or at your desk works well." />
+    </div>
+    <div class="about-grid__text">
+      <p>
+        I'm Avijeet, an experience designer in Mumbai. I study Product Experience Design at NIFT, with a minor in Design Innovation,
+        and I work on brand and visual design at Ai+ Smartphone.
+      </p>
+      <p>
+        I started out filming festivals and tours, and went on to produce video for Nike, Valorant and Sunburn. Moving into product
+        and interface design felt natural: in both, the job is to understand people and shape how something feels to them.
+      </p>
+      <p>
+        <span class="todo">Placeholder: one or two lines on what you're looking for next, such as internships, full-time roles or freelance work, and the kind of teams you want to join.</span>
+      </p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+        <a class="btn btn--solid" href={`mailto:${site.email}`}>Email me</a>
+        {site.resume ? <a class="btn btn--line" href={site.resume}>Download résumé</a> : <span class="btn btn--line todo">Résumé PDF link</span>}
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="how">
+    <div class="section-head">
+      <h2 id="how">How I work</h2>
+      <p>The same four layers, whether the output is an app, a brand or a film.</p>
+    </div>
+    <ol class="steps">
+      <li><h3>Understand</h3><p>Talk to the people involved, watch how things are used today and find the real problem.</p></li>
+      <li><h3>Structure</h3><p>Turn what I learned into flows, systems, storyboards or grids before any polish.</p></li>
+      <li><h3>Craft</h3><p>Design the interface, the identity or the frames, and sweat the details.</p></li>
+      <li><h3>Tell</h3><p>Shape how it's revealed: motion, edit, sound and story, so people feel it.</p></li>
+    </ol>
+  </section>
+
+  <section class="section wrap" aria-label="Experience and education">
+    <div class="cv">
+      <h2>Experience</h2>
+      <ul>
+        {experience.map((e) => (
+          <li><span class="y">{e.year}</span><a class="c" href={`/work/${e.slug}/`}>{e.client}</a><span class="r">{e.role}</span></li>
+        ))}
+      </ul>
+    </div>
+    <div class="cv">
+      <h2>Education</h2>
+      <ul>
+        <li><span class="y">2023–now</span><span class="c">National Institute of Fashion Technology, Mumbai</span><span class="r">B.Des, Product Experience Design, minor in Design Innovation</span></li>
+      </ul>
+    </div>
+    <div class="cv">
+      <h2>Leadership</h2>
+      <ul>
+        <li><span class="y">2026–now</span><span class="c">Adventure and Photography Club, NIFT Mumbai</span><span class="r">President</span></li>
+      </ul>
+    </div>
+    <div class="cv">
+      <h2>Tools</h2>
+      <div class="tools">
+        {Object.entries(tools).map(([group, list]) => (
+          <div>
+            <h3>{group}</h3>
+            <ul style="list-style:none;margin:0;padding:0">
+              {list.map((t) => <li>{t}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

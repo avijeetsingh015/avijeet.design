@@ -1,0 +1,111 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Intro from '../components/Intro.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Placeholder from '../components/Placeholder.astro';
+import Eye from '../components/Eye.astro';
+import { disciplines, disciplineOrder, credits, experience } from '../data/site';
+
+const all = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
+const featured = all.filter((p) => p.data.featured);
+const counts = Object.fromEntries(disciplineOrder.map((k) => [k, all.filter((p) => p.data.disciplines.includes(k)).length]));
+const slugFor = (name: string) => experience.find((e) => e.client === name)?.slug;
+const rulerMarks = Array.from({ length: 60 }, (_, i) => i * 100);
+---
+<Base>
+  <Intro />
+
+  <section class="hero wrap" aria-labelledby="hero-name">
+    <h1 class="layer-name" id="hero-name" data-layer-name aria-label="Avijeet Singh">
+      <span class="ln-wire" aria-hidden="true"><span class="ln-line">AVIJEET</span><span class="ln-line">SINGH</span></span>
+      <span class="ln-color" aria-hidden="true"><span class="ln-line">AVIJEET</span><span class="ln-line">SINGH</span></span>
+      <span class="ln-ink" aria-hidden="true"><span class="ln-line">AVIJEET</span><span class="ln-line">SINGH</span></span>
+    </h1>
+
+    <div class="hero__grid">
+      <div class="hero__statement">
+        <p>
+          <strong>Experience designer in Mumbai.</strong> I design digital products, brand systems and visuals,
+          and I shoot and cut the films that bring them to life. Every project here opens up so you can see the layers underneath.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--solid" href="/work/">See the work</a>
+          <a class="btn btn--line" href="/reel/" data-cursor="Play">Watch the reel</a>
+        </div>
+      </div>
+
+      <nav class="layers-panel" aria-label="Browse work by discipline">
+        <div class="layers-panel__head">Layers <span>{all.length} projects</span></div>
+        <ul>
+          {disciplineOrder.map((k) => (
+            <li>
+              <a class="layer-row" href={`/work/?layer=${k}`} data-cursor="Isolate">
+                <Eye />
+                <span class="swatch" style={`--c:${disciplines[k].color}`}></span>
+                <span>{disciplines[k].name}</span>
+                <span class="count">{counts[k]}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </section>
+
+  <section class="strip" data-strip aria-labelledby="selected-work">
+    <div class="strip__sticky">
+      <div class="strip__head section-head">
+        <h2 id="selected-work">Selected work</h2>
+        <p>Hover a project to peel back its top layer and see how it was made.</p>
+      </div>
+      <div class="ruler" aria-hidden="true">
+        <div class="ruler__inner" data-ruler>
+          {rulerMarks.map((m) => <span style={`left:calc(var(--gutter) + ${m}px)`}>{m}</span>)}
+        </div>
+        <span class="ruler__now" data-strip-now>{featured[0]?.data.title}</span>
+      </div>
+      <div class="strip__track" data-strip-track>
+        {featured.map((p) => <ProjectCard entry={p} />)}
+        <div class="strip__end">
+          <h3>{all.length - featured.length} more projects in the full archive.</h3>
+          <a class="text-link" href="/work/">Open all work</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="credits-title">
+    <div class="section-head">
+      <h2 id="credits-title">Brands and events I've worked with</h2>
+      <p>Films, campaigns and design for brands, festivals and launches since 2024.</p>
+    </div>
+    <ul class="credits">
+      {credits.map((c) => {
+        const slug = slugFor(c.name) ?? (c.name === 'Ai+ Smartphone' ? 'aiplus-brand' : undefined);
+        return (
+          <li>
+            <span class="swatch" style={`--c:${disciplines[c.d].color}`} aria-hidden="true"></span>
+            {slug ? <a href={`/work/${slug}/`}>{c.name}</a> : c.name}
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+
+  <section class="section wrap" aria-labelledby="about-teaser">
+    <div class="teaser">
+      <div class="teaser__media">
+        <Placeholder kind="portrait" ratio="4 / 5" label="Portrait of Avijeet, ideally shot on set or in the studio" />
+      </div>
+      <div class="teaser__text">
+        <h2 id="about-teaser" class="small">About</h2>
+        <p>
+          I'm a Product Experience Design student at NIFT Mumbai and a designer at Ai+. Before design school I was behind the camera
+          at festivals and tours, and that still shapes how I work: I think about how something feels, not only how it looks.
+        </p>
+        <a class="text-link" href="/about/">More about me</a>
+      </div>
+    </div>
+  </section>
+</Base>

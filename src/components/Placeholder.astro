@@ -1,0 +1,22 @@
+---
+// An empty layer waiting for real media.
+// Pass `src` to show a real image instead of the placeholder.
+interface Props {
+  label: string;
+  kind?: 'final' | 'process' | 'empty' | 'video' | 'portrait';
+  ratio?: string;
+  accent?: string;
+  src?: string;
+  alt?: string;
+  class?: string;
+}
+const { label, kind = 'final', ratio, accent, src, alt = '', class: cls = '' } = Astro.props;
+const style = [ratio ? `--ratio:${ratio}` : '', accent ? `--accent:${accent}` : ''].filter(Boolean).join(';');
+---
+{src ? (
+  <img class:list={['media-img', cls]} src={src} alt={alt} loading="lazy" decoding="async" style={ratio ? `aspect-ratio:${ratio}` : undefined} />
+) : (
+  <div class:list={['ph', `ph--${kind}`, cls]} style={style} role="img" aria-label={`Placeholder: ${label}`} data-label={label}>
+    {kind === 'video' && <span class="ph__play" aria-hidden="true"></span>}
+  </div>
+)}

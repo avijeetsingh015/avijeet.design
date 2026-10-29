@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { experience } from '../data/site';
+
+// TODO: when the reel is uploaded to Vimeo or YouTube, put the embed URL here.
+// Vimeo example: https://player.vimeo.com/video/123456789?title=0&byline=0&portrait=0
+const reelEmbed = '';
+---
+<Base title="Reel" description="Film, edit and motion reel by Avijeet Singh.">
+  <header class="page-head wrap">
+    <h1 class="page-title">Reel</h1>
+    <p class="page-intro">Two minutes of festivals, tours, launches and products I've shot, cut and graded.</p>
+  </header>
+
+  <section class="wrap reel-player" aria-label="Showreel">
+    {reelEmbed ? (
+      <div style="aspect-ratio:16/9;border-radius:6px;overflow:hidden;background:var(--ink)">
+        <iframe src={reelEmbed} title="Avijeet Singh showreel" style="width:100%;height:100%;border:0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+      </div>
+    ) : (
+      <Placeholder kind="video" ratio="16 / 9" label="Showreel, 16:9, about 90 to 120 seconds. Host on Vimeo or YouTube and paste the embed link." />
+    )}
+  </section>
+
+  <section class="wrap" aria-labelledby="credits-head">
+    <div class="section-head">
+      <h2 id="credits-head">Credits</h2>
+      <p>Where the footage in the reel comes from.</p>
+    </div>
+    <table class="credits-table">
+      <thead>
+        <tr><th scope="col">Year</th><th scope="col">Client</th><th scope="col">Role</th></tr>
+      </thead>
+      <tbody>
+        {experience.map((e) => (
+          <tr>
+            <td>{e.year}</td>
+            <td class="client"><a href={`/work/${e.slug}/`}>{e.client}</a></td>
+            <td>{e.role}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+</Base>

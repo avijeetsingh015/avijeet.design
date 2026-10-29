@@ -1,0 +1,45 @@
+---
+import Placeholder from './Placeholder.astro';
+import { disciplines } from '../data/site';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'work'>;
+  ratio?: string;
+}
+const { entry, ratio } = Astro.props;
+const d = entry.data;
+---
+<a
+  class="card"
+  href={`/work/${entry.id}/`}
+  data-peel
+  data-accent={d.accent}
+  data-title={d.title}
+  data-disciplines={d.disciplines.join(' ')}
+  data-cursor="Peel"
+  style={`--accent:${d.accent}`}
+>
+  <div class="card__media" data-peel-media style={ratio ? `--ratio:${ratio}` : undefined}>
+    <div class="card__layer card__layer--process" aria-hidden="true">
+      <Placeholder kind="process" label={`${d.processLabel} layer`} src={d.process} />
+    </div>
+    <div class="card__layer card__layer--final">
+      <Placeholder kind="final" label={`${d.title}, cover image`} accent={d.accent} src={d.cover} alt={d.title} />
+    </div>
+    <span class="card__lens" aria-hidden="true"></span>
+    <span class="sel" aria-hidden="true">
+      <span class="sel__handles"><i></i><i></i><i></i><i></i></span>
+      <span class="sel__tag">{d.kind}, {d.year}</span>
+    </span>
+  </div>
+  <div class="card__meta">
+    <h3 class="card__title">{d.title}</h3>
+    <p class="card__line">{d.role}, {d.client}</p>
+    <ul class="card__layers" aria-label="Disciplines">
+      {d.disciplines.map((k) => (
+        <li><span class="swatch" style={`--c:${disciplines[k].color}`}></span>{disciplines[k].short}</li>
+      ))}
+    </ul>
+  </div>
+</a>

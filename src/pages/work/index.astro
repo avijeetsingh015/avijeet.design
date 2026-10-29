@@ -1,0 +1,52 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import Eye from '../../components/Eye.astro';
+import { disciplines, disciplineOrder } from '../../data/site';
+
+const all = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
+const counts = Object.fromEntries(disciplineOrder.map((k) => [k, all.filter((p) => p.data.disciplines.includes(k)).length]));
+---
+<Base title="Work" description="Product, brand, visual, film and photography projects by Avijeet Singh.">
+  <header class="page-head wrap">
+    <h1 class="page-title">Work</h1>
+    <p class="page-intro">Everything I've made, sorted by layer. Hide a layer to focus on one kind of work.</p>
+  </header>
+
+  <div class="wrap work" data-work data-mode="grid">
+    <aside class="layers-panel" data-filter aria-label="Filter by discipline">
+      <div class="layers-panel__head">Layers <span>{all.length}</span></div>
+      <ul>
+        {disciplineOrder.map((k) => (
+          <li>
+            <label class="layer-toggle" data-cursor="Toggle">
+              <input type="checkbox" value={k} checked />
+              <Eye class="eye-on" />
+              <Eye off class="eye-off" />
+              <span class="swatch" style={`--c:${disciplines[k].color}`}></span>
+              <span>{disciplines[k].name}</span>
+              <span class="count">{counts[k]}</span>
+            </label>
+          </li>
+        ))}
+      </ul>
+      <div class="layers-panel__foot" role="group" aria-label="View">
+        <button class="seg" type="button" data-view="grid" aria-pressed="true">Grid</button>
+        <button class="seg" type="button" data-view="list" aria-pressed="false">Index</button>
+      </div>
+    </aside>
+
+    <div>
+      <div class="work__bar">
+        <span data-count aria-live="polite">{all.length} projects visible</span>
+      </div>
+      <div class="work-grid">
+        {all.map((p) => <ProjectCard entry={p} ratio="4 / 3" />)}
+      </div>
+      <div class="empty-state" data-empty hidden>
+        <p>All layers are hidden. Turn one back on to see projects.</p>
+      </div>
+    </div>
+  </div>
+</Base>

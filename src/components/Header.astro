@@ -1,0 +1,34 @@
+---
+const path = Astro.url.pathname;
+const links = [
+  { href: '/work/', label: 'Work' },
+  { href: '/reel/', label: 'Reel' },
+  { href: '/about/', label: 'About' },
+];
+---
+<header class="site-header">
+  <a class="mark" href="/" aria-label="Avijeet Singh, home">
+    <svg viewBox="0 0 34 26" aria-hidden="true">
+      <rect class="m-wire" x="0.75" y="0.75" width="20" height="16" rx="2" fill="none" stroke="var(--select)" stroke-width="1.5" />
+      <rect class="m-color" x="12" y="9" width="20" height="16" rx="2" fill="color-mix(in oklab, var(--tint) 45%, var(--vellum))" />
+      <rect x="6.5" y="5" width="20" height="16" rx="2" fill="var(--ink)" />
+    </svg>
+    <span class="mark__text">
+      <span class="mark__name">Avijeet Singh</span>
+      <span class="mark__role">Experience designer</span>
+    </span>
+  </a>
+  <nav class="site-nav" aria-label="Main">
+    <ul>
+      {links.map((l) => (
+        <li><a href={l.href} aria-current={path.startsWith(l.href) ? 'page' : undefined}>{l.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+  <div class="header-tools">
+    <button class="sound" type="button" data-sound aria-pressed="false" data-cursor="Sound">
+      <span class="sound__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span data-sound-label>Sound off</span>
+    </button>
+  </div>
+</header>

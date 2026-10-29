@@ -1,0 +1,39 @@
+---
+import { site } from '../data/site';
+---
+<footer class="site-footer" id="contact">
+  <div class="inner">
+    <p class="footer-lead">Working on a product, a brand or a film that needs a designer? Write to me.</p>
+    <a class="footer-email" href={`mailto:${site.email}`} data-cursor="Write">{site.email}</a>
+
+    <div class="footer-grid">
+      <div>
+        <h2>Elsewhere</h2>
+        <ul>
+          <li><a href={site.instagram} rel="noopener" target="_blank">Instagram</a></li>
+          {site.linkedin ? <li><a href={site.linkedin} rel="noopener" target="_blank">LinkedIn</a></li> : <li class="muted"><span class="todo">LinkedIn link</span></li>}
+          {site.behance ? <li><a href={site.behance} rel="noopener" target="_blank">Behance</a></li> : null}
+          {site.resume ? <li><a href={site.resume}>Résumé (PDF)</a></li> : <li class="muted"><span class="todo">Résumé PDF</span></li>}
+        </ul>
+      </div>
+      <div>
+        <h2>Based in</h2>
+        <p>{site.city}</p>
+        <p class="muted"><span data-clock>Mumbai time</span></p>
+      </div>
+      <div>
+        <h2>Pages</h2>
+        <ul>
+          <li><a href="/work/">Work</a></li>
+          <li><a href="/reel/">Reel</a></li>
+          <li><a href="/about/">About</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>This site</h2>
+        <p>{site.version}</p>
+        <p class="muted">Designed and built by Avijeet, 2026</p>
+      </div>
+    </div>
+  </div>
+</footer>
